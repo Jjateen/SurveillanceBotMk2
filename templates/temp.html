@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #222;
+      flex-direction: column;
+    }
+
+    .joystick-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .joystick {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin-top: 30px;
+      background-color: #555;
+      border-radius: 50%;
+      overflow: hidden;
+      transform: rotate(180deg);
+    }
+
+    .handle {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      background-color: #333;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.1s ease-out;
+    }
+
+    .coordinates {
+      color: white;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .direction-label {
+      color: white;
+      text-align: center;
+      font-size: 1.2em;
+    }
+    .image-container {
+        border-radius: 18px;
+        margin-bottom: 8px;
+      }
+    .button-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 8px;
+      }
+    .toggle-button {
+        background-color: #FF5733;
+        border: 2px solid #fff;
+        font-size: 48px;
+        cursor: pointer;
+        border-radius: 12px;
+    }
+  </style>
+  <title>Joystick</title>
+</head>
+<body>
+    <div class="image-container">
+      <img id="video_feed" src="{{ url_for('video') }}" alt="Video Feed" border-radius: 12px;>    </div>
+    <br></br>
+  <div class="joystick-container">
+    <div class="joystick" id="joystick">
+      <div class="handle" id="handle"></div>
+    </div>
+    <p class="coordinates" id="coordinates">Coordinates: (0, 0)</p>
+    <p class="direction-label" id="directionLabel">Direction: Center</p>
+  </div>
+  <div class='button-container' style='margin: 8px;'>
+    <p align='center'>
+        <button class='toggle-button' onmousedown='getsend("ledon")'><b>&#127774</b></button>
+        <button class='toggle-button' onmousedown='getsend("ledoff")'><b>&#127769</b></button>
+    </p>
+</div>
+
+  <script>
+    function getsend(arg) {
+      var xhttp = new XMLHttpRequest();
+      xhttp.open('GET', 'http://192.168.1.16/' + arg + '?' + new Date().getTime(), true);
+      xhttp.send();
+  }  
+    document.addEventListener('DOMContentLoaded', function () {
+      const joystick = document.getElementById('joystick');
+      const handle = document.getElementById('handle');
+      const coordinatesLabel = document.getElementById('coordinates');
+      const directionLabel = document.getElementById('directionLabel');
+
+      let isDragging = false;
+
+      handle.addEventListener('mousedown', startDragging);
+      document.addEventListener('mouseup', stopDragging);
+      document.addEventListener('mousemove', moveHandle);
+
+      function startDragging(e) {
+        isDragging = true;
+        joystick.style.transition = 'none';
+        handle.style.transition = 'none';
+      }
+
+      function stopDragging() {
+        isDragging = false;
+        joystick.style.transition = 'transform 0.1s ease-out';
+        handle.style.transition = 'transform 0.1s ease-out';
+        autoCenterHandle();
+      }
+
+      function moveHandle(e) {
+        if (isDragging) {
+          const rect = joystick.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+
+          const angle = Math.atan2(y, x);
+          const distance = Math.min(joystick.clientWidth / 2, Math.hypot(x, y));
+
+          const newX = distance * Math.cos(angle);
+          const newY = distance * Math.sin(angle);
+
+          handle.style.transform = `translate(${-newX}px, ${-newY}px)`;
+
+          // Display coordinates
+          coordinatesLabel.textContent = `Coordinates: (${Math.round(-newX)}, ${Math.round(-newY)})`;
+
+          // Determine direction
+          const threshold = 10; // Adjust as needed
+          if (Math.abs(newX) < threshold && Math.abs(newY) < threshold) {
+            directionLabel.textContent = 'Direction: Center';
+          } else if (Math.abs(newX) >= Math.abs(newY)) {
+            directionLabel.textContent = newX > 0 ? 'Direction: Right' : 'Direction: Left';
+          } else {
+            directionLabel.textContent = newY > 0 ? 'Direction: Down' : 'Direction: Up';
+          }
+
+          // Call getsend based on direction
+          if (directionLabel.textContent === 'Direction: Up') {
+            getsend('left');
+          } else if (directionLabel.textContent === 'Direction: Down') {
+            getsend('right');
+          } else if (directionLabel.textContent === 'Direction: Left') {
+            getsend('go');
+          } else if (directionLabel.textContent === 'Direction: Right') {
+            getsend('back');
+          } else if (directionLabel.textContent === 'Direction: Center') {
+            getsend('stop');
+          }
+        }
+      }
+
+      function autoCenterHandle() {
+        handle.style.transform = 'translate(-50%, -50%)';
+        coordinatesLabel.textContent = 'Coordinates: (0, 0)';
+        directionLabel.textContent = 'Direction: Center';
+        getsend('stop');
+      }    
+    });
+  </script>
+</body>
+</html>

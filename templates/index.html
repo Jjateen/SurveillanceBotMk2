@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .arrow-button {
+            width: 100px;
+            height: 100px;
+            background: transparent;
+            border: 2px solid #fff;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 24px;
+            color: #fff;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .arrow-button:hover {
+            background-color: #00FF00;
+            box-shadow: 0 0 10px #00FF00;
+            transform: scale(1.1);
+        }
+
+        .arrow-up {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 100px solid white;
+        }
+
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-top: 100px solid white;
+        }
+
+        .arrow-left {
+            width: 0;
+            height: 0;
+            border-top: 50px solid transparent;
+            border-bottom: 50px solid transparent;
+            border-right: 100px solid white;
+        }
+
+        .arrow-right {
+            width: 0;
+            height: 0;
+            border-top: 50px solid transparent;
+            border-bottom: 50px solid transparent;
+            border-left: 100px solid white;
+        }
+
+        .stop-button {
+            background-color: #FF5733;
+            border: 2px solid #fff;
+            text-align: center;
+            display: flex;
+            border-radius: 100px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-button {
+            background-color: #FF5733;
+            border: 2px solid #fff;
+            font-size: 48px;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <p align=center border-radius: 18px;><img src="{{ url_for('video') }}" style='width:640px;'></p>
+    <br/><br/>
+    <div class='arrow-button arrow-up' onmousedown="getsend('back')" onmouseup="getsend('stop')" ontouchstart="getsend('back')" ontouchend="getsend('stop')"></div>
+    <div class='button-container'>
+        <div class='arrow-button arrow-left' onmousedown="getsend('left')" onmouseup="getsend('stop')" ontouchstart="getsend('left')" ontouchend="getsend('stop')"></div>
+        <div class='arrow-button stop-button' onmousedown="getsend('stop')" onmouseup="getsend('stop')">Stop</div>
+        <div class='arrow-button arrow-right' onmousedown="getsend('right')" onmouseup="getsend('stop')" ontouchstart="getsend('right')" ontouchend="getsend('stop')"></div>
+    </div>
+    <div class='arrow-button arrow-down' onmousedown="getsend('go')" onmouseup="getsend('stop')" ontouchstart="getsend('go')" ontouchend="getsend('stop')"></div>
+    <div class='button-container' style='margin: 8px;'>
+        <p align='center'>
+            <button class='toggle-button' onmousedown='getsend("ledon")'><b>&#127774</b></button>
+            <button class='toggle-button' onmousedown='getsend("ledoff")'><b>&#127769</b></button>
+        </p>
+    </div>
+
+    <script>
+        function getsend(arg) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open('GET', 'http://192.168.1.16/' + arg + '?' + new Date().getTime(), true);
+            xhttp.send();
+        }        
+    </script>
+</body>
+
+</html>
