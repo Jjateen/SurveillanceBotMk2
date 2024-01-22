@@ -14,8 +14,8 @@
 //#define CAMERA_MODEL_M5STACK_PSRAM
 #define CAMERA_MODEL_AI_THINKER
 
-const char* ssid = "FTTH-895F";   //Enter SSID WIFI Name
-const char* password = "pr2312637626";   //Enter WIFI Password
+const char* ssid = "ssid";   //Enter SSID WIFI Name
+const char* password = "password";   //Enter WIFI Password
 //const char* ssid = "Jj";
 //const char* password = "12345678";
 
