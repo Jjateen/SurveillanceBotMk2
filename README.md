@@ -31,7 +31,6 @@ Follow these steps to get Surveillance Bot Mk2 up and running:
 
 - Connect to the robot's web app interface and use the joystick for wireless control.
 - View the live video feed with real-time object detection.
-- Explore the collected images in the "images" directory.
 
 ## Contributing
 
