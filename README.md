@@ -76,6 +76,17 @@ To ensure smooth operation, test the ESP32CAM’s connectivity and object detect
 - Connect to the robot's web app interface and use the joystick for wireless control.
 - View the live video feed with real-time object detection.
 - Capture and store images for review.
+Here’s a section you can add to your README for the Apache 2.0 License:
+
+---
+
+## License
+
+This project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
+---
+
+This brief section explains the use of the Apache 2.0 License and points users to both your repository's LICENSE file and the official license documentation.
 
 ## Contributing
 
