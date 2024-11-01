@@ -1,5 +1,4 @@
 ---
-
 # Surveillance Bot Mk2
 
 ## [Demo Video](https://www.linkedin.com/posts/jjateen_ai-ml-electronics-activity-7143582599070818305-wCSS?utm_source=share&utm_medium=member_desktop)
